@@ -1,0 +1,57 @@
+project:
+  name: semantic_comm
+  output_root: outputs
+  experiment: cifar10_full
+seed: 42
+device: auto
+
+dataset:
+  name: cifar10
+  root: data
+  image_size: 32
+  num_workers: 2
+  val_ratio: 0.1
+  batch_size: 128
+  pin_memory: false
+
+model:
+  in_channels: 3
+  latent_dim: 128
+  base_channels: 32
+  num_classes: 10
+  enable_recon: true
+  enable_cls: true
+  channel:
+    type: mixed
+    snr_db: 12.0
+    dropout_p: 0.1
+    bandwidth_ratio: 0.75
+
+training:
+  epochs: 20
+  lr: 0.001
+  weight_decay: 0.0001
+  cls_loss_weight: 1.0
+  recon_loss_weight: 0.5
+  grad_clip: 1.0
+  save_every: 1
+
+partition:
+  mode: auto
+  manual_point: p2
+  latency_budget_ms: 60
+  bandwidth_budget_kb: 16
+  edge_compute_budget: 0.3
+
+deployment:
+  export_path: outputs/export
+  quantized_path: outputs/quantized
+  benchmark_warmup: 20
+  benchmark_iters: 100
+  consistency_threshold: 0.03
+
+service:
+  host: 127.0.0.1
+  cloud_port: 9000
+  edge_port: 9001
+  timeout_s: 10

@@ -1,0 +1,57 @@
+project:
+  name: semantic_comm
+  output_root: outputs
+  experiment: mnist_quick
+seed: 7
+device: cpu
+
+dataset:
+  name: mnist
+  root: data
+  image_size: 28
+  num_workers: 0
+  val_ratio: 0.1
+  batch_size: 64
+  pin_memory: false
+
+model:
+  in_channels: 1
+  latent_dim: 64
+  base_channels: 16
+  num_classes: 10
+  enable_recon: true
+  enable_cls: true
+  channel:
+    type: awgn
+    snr_db: 10.0
+    dropout_p: 0.1
+    bandwidth_ratio: 0.8
+
+training:
+  epochs: 2
+  lr: 0.001
+  weight_decay: 0.0001
+  cls_loss_weight: 1.0
+  recon_loss_weight: 1.0
+  grad_clip: 1.0
+  save_every: 1
+
+partition:
+  mode: auto
+  manual_point: p1
+  latency_budget_ms: 120
+  bandwidth_budget_kb: 24
+  edge_compute_budget: 0.6
+
+deployment:
+  export_path: outputs/export
+  quantized_path: outputs/quantized
+  benchmark_warmup: 3
+  benchmark_iters: 10
+  consistency_threshold: 0.05
+
+service:
+  host: 127.0.0.1
+  cloud_port: 9000
+  edge_port: 9001
+  timeout_s: 10

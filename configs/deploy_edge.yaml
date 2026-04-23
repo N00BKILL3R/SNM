@@ -1,0 +1,42 @@
+project:
+  output_root: outputs
+  experiment: deploy_edge_demo
+seed: 42
+device: cpu
+
+dataset:
+  name: cifar10
+  root: data
+  image_size: 32
+  batch_size: 1
+  num_workers: 0
+  val_ratio: 0.1
+
+model:
+  in_channels: 3
+  latent_dim: 128
+  base_channels: 32
+  num_classes: 10
+  enable_recon: true
+  enable_cls: true
+  channel:
+    type: mixed
+    snr_db: 12.0
+    dropout_p: 0.1
+    bandwidth_ratio: 0.75
+
+partition:
+  mode: auto
+  manual_point: p1
+  latency_budget_ms: 80
+  bandwidth_budget_kb: 16
+  edge_compute_budget: 0.3
+
+service:
+  host: 127.0.0.1
+  cloud_port: 9000
+  edge_port: 9001
+  timeout_s: 10
+
+edge_profile: low_power_edge
+cloud_profile: cpu_cloud
