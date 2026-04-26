@@ -1,0 +1,24 @@
+project:
+  output_root: outputs
+  experiment: deploy_cloud_demo
+seed: 42
+device: cpu
+
+model:
+  in_channels: 3
+  latent_dim: 128
+  base_channels: 32
+  num_classes: 10
+  enable_recon: true
+  enable_cls: true
+  channel:
+    type: mixed
+    snr_db: 12.0
+    dropout_p: 0.1
+    bandwidth_ratio: 0.75
+
+service:
+  host: 127.0.0.1
+  cloud_port: 9000
+  edge_port: 9001
+  timeout_s: 10
