@@ -7,9 +7,11 @@ from typing import Any, Dict
 
 import yaml
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
 
 def load_yaml(path: str | Path) -> Dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(Path(path), "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -24,8 +26,12 @@ def deep_update(base: Dict[str, Any], new: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def load_config(config_path: str) -> Dict[str, Any]:
-    cfg = load_yaml("configs/default.yaml")
-    user_cfg = load_yaml(config_path)
+    default_path = PROJECT_ROOT / "configs" / "default.yaml"
+    user_path = Path(config_path)
+    if not user_path.is_absolute():
+        user_path = PROJECT_ROOT / user_path
+    cfg = load_yaml(default_path)
+    user_cfg = load_yaml(user_path)
     return deep_update(cfg, user_cfg)
 
 
